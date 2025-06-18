@@ -5,8 +5,10 @@ import java.util.concurrent.TimeUnit;
 import org.awaitility.Awaitility;
 
 import edu.wpi.first.hal.HAL;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DriverStationSim;
+import edu.wpi.first.wpilibj.simulation.SimHooks;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import vv.config.VVConfig;
@@ -20,13 +22,16 @@ public class TestSetup {
         if (!HAL.initialize(500, 0)) {
             throw new RuntimeException("HAL initialization failed");
         }
-
+        
         RobotController.resetRailFaultCounts();
         CommandScheduler.getInstance().cancelAll();
         CommandScheduler.getInstance().run();
         DriverStationSim.setEnabled(true);
         DriverStationSim.notifyNewData();
-
+        DriverStationSim.resetData();
+		DriverStation.silenceJoystickConnectionWarning(true);
+        SimHooks.setProgramStarted();
+        
         var simLoop = CONFIG.simulation().simLoopPeriodFreq().asPeriod();
         Awaitility.setDefaultPollInterval((long)simLoop.baseUnitMagnitude(), TimeUnit.SECONDS);
     }
