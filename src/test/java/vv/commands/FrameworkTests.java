@@ -4,10 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import edu.wpi.first.wpilibj.simulation.XboxControllerSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import static vv.utils.TestSetup.resetSimulationState;
 
 public class FrameworkTests {
@@ -53,6 +55,31 @@ public class FrameworkTests {
         assertEquals(true, cmd2.isScheduled());
     }
 
+    @Test
+    void controllerTriggersCommand() {
+        // Arrange
+        CommandXboxController controller = new CommandXboxController(0);
+        XboxControllerSim sim = new XboxControllerSim(controller.getHID());
+        Command cmd = new InterruptionTrackerCmd();        
+        controller.a().onTrue(cmd);
+
+        // Verify initial state
+        assertEquals(false, controller.getHID().getAButton());
+        assertEquals(false, controller.a().getAsBoolean());
+        assertEquals(false, CommandScheduler.getInstance().isScheduled(cmd));
+        
+        // Act - Press button to trigger command
+        sim.setAButton(true);
+        sim.notifyNewData();
+        CommandScheduler.getInstance().run(); // Then process scheduled commands
+
+        // Assert
+        assertEquals(true, controller.getHID().getAButton());
+        assertEquals(true, controller.getHID().getAButtonPressed());
+        assertEquals(true, controller.a().getAsBoolean());
+        assertEquals(true, CommandScheduler.getInstance().isScheduled(cmd));
+    }
+
     static class TestSubsystem implements Subsystem {}
 
     static class InterruptionTrackerCmd extends Command {
@@ -66,6 +93,11 @@ public class FrameworkTests {
         public InterruptionTrackerCmd(InterruptionBehavior interruptionBehavior) {
             this();
             this.interruptionBehavior = interruptionBehavior;
+        }
+
+        @Override
+        public boolean isFinished() {
+            return false; // Never finish
         }
 
         @Override

@@ -18,14 +18,16 @@ import vv.subsystems.drivetrain.Drivetrain;
 public class DriverControls {
     private final CommandXboxController controller;
     private final XboxControllerSim sim;
+    private final double maxLinearSpeed;
+    private final double  maxRotationalSpeed;
 
     public DriverControls(
         VVConfig config, 
         Drivetrain drivetrain
     ) {
         var driverConfig = config.controllers().driver();
-        var maxLinearSpeed = config.drivetrain().constants().freeSpeedAt12Volts().in(MetersPerSecond);
-        var maxRotationalSpeed = config.drivetrain().constants().maxRotationsPerSecond().in(RadiansPerSecond);
+        this.maxLinearSpeed = config.drivetrain().constants().maxLinearSpeed().in(MetersPerSecond);
+        this.maxRotationalSpeed = config.drivetrain().constants().maxRotationsPerSecond().in(RadiansPerSecond);
 
         controller = new CommandXboxController(driverConfig.port());
         drivetrain.setDefaultCommand(
@@ -33,10 +35,11 @@ public class DriverControls {
 		        .withDeadband(maxLinearSpeed * driverConfig.translationalDeadband())
                 .withRotationalDeadband(maxRotationalSpeed * driverConfig.rotationalDeadband())
 		        .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
-                .withVelocityX(-controller.getLeftY() * maxLinearSpeed)
-				.withVelocityY(-controller.getLeftX() * maxLinearSpeed)
-				.withRotationalRate(-controller.getRightX() * maxRotationalSpeed)
+                .withVelocityX(drivetrain.clampLinearVelocity(-controller.getLeftY() * maxLinearSpeed))
+				.withVelocityY(drivetrain.clampLinearVelocity(-controller.getLeftX() * maxLinearSpeed))
+				.withRotationalRate(drivetrain.clampAngularVelocity(-controller.getRightX() * maxRotationalSpeed))
 			)
+            .withName("DriveWithController")
 		);
 
         sim = new XboxControllerSim(controller.getHID());
@@ -53,9 +56,8 @@ public class DriverControls {
         return controller;
     }
 
-    public void simulateControls(Consumer<XboxControllerSim> consumer) {
+    public void simulate(Consumer<XboxControllerSim> consumer) {
         consumer.accept(sim);
         sim.notifyNewData();
     }
-
 }
