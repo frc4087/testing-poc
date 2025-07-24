@@ -15,10 +15,12 @@ import static edu.wpi.first.units.Units.Amp;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.KilogramSquareMeters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
@@ -81,6 +83,8 @@ public record DrivetrainConfig(
         Distance wheelRadius,
         Current slipCurrent,
         LinearVelocity freeSpeedAt12Volts,
+        LinearVelocity maxLinearSpeed,
+        AngularVelocity maxRotationsPerSecond,
         SteerFeedbackType steerFeedbackType,
         MotorConfig driveMotor,
         MotorConfig steerMotor
@@ -90,6 +94,8 @@ public record DrivetrainConfig(
             Objects.requireNonNull(wheelRadius);
             Objects.requireNonNull(slipCurrent);
             Objects.requireNonNull(freeSpeedAt12Volts);
+            Objects.requireNonNull(maxLinearSpeed);
+            Objects.requireNonNull(maxRotationsPerSecond);
             Objects.requireNonNull(steerFeedbackType);
             Objects.requireNonNull(driveMotor);
             Objects.requireNonNull(steerMotor);
@@ -101,6 +107,8 @@ public record DrivetrainConfig(
                 Inches.of(readDoubleProperty(p, "drivetrain.constants.wheel.radius.inches")),
                 Amp.of(readDoubleProperty(p, "drivetrain.constants.slip.current.amps")),
                 MetersPerSecond.of(readDoubleProperty(p, "drivetrain.constants.free.speed.at.12.volts.mps")),
+                MetersPerSecond.of(readDoubleProperty(p, "drivetrain.constants.max.mps")),
+                RadiansPerSecond.of(readDoubleProperty(p, "drivetrain.constants.max.rads.per.s")),
                 SteerFeedbackType.valueOf(
                     Objects.requireNonNull(
                         p.getProperty("drivetrain.constants.steer.feedback.type"),

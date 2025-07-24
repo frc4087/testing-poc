@@ -32,7 +32,7 @@ The test runner from the **VSCode Extension Pack for Java** will add a "play" ic
 to a particular test method to run just that test or the button next to the class name to run all of the tests in the file (called a suite).
 
 ### Skipping Tests
-If you want to build without worrying about skilling tests, add `-x test` to your Gradle command.
+If you want to build without worrying about tests passing, add `-x test` to your Gradle command.
 ```bash
 ./gradlew build -x test
 ```

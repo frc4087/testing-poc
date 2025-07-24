@@ -10,12 +10,14 @@ public class VVConfig {
     private final DrivetrainConfig drivetrainConfig; 
     private final PIDConfig pid;
     private final SimulationConfig simulation;
+    private final ControllersConfig controllers;
 
     private VVConfig(String filePath) {
         var props = readFileConfig(filePath);
         this.drivetrainConfig = DrivetrainConfig.fromProperties(props);
         this.pid = PIDConfig.fromProperties(props);
         this.simulation = SimulationConfig.fromProperties(props);
+        this.controllers = ControllersConfig.fromProperties(props);
     }
 
     public DrivetrainConfig drivetrain() {
@@ -28,6 +30,10 @@ public class VVConfig {
 
     public SimulationConfig simulation() {
         return this.simulation;
+    }
+
+    public ControllersConfig controllers() {
+        return this.controllers;
     }
 
     public static VVConfig readFromPath(String filePath) {
