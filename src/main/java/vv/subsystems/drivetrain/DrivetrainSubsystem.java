@@ -10,6 +10,8 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import edu.wpi.first.epilogue.Logged;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
@@ -20,12 +22,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import vv.config.VVConfig;
 
-public class Drivetrain extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> implements Subsystem {
+@Logged
+public class DrivetrainSubsystem extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> implements Subsystem {
     private final double discretizationDelta;
     private final double maxLinearSpeedMps;
     private final double maxRadsPerSecond;
 
-    public Drivetrain(
+    public DrivetrainSubsystem(
         VVConfig config,
         SwerveDrivetrainConstants drivetrainConstants,
         SwerveModuleConstants<?, ?, ?>[] swerveModules
@@ -44,7 +47,7 @@ public class Drivetrain extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
         this.discretizationDelta = Seconds.convertFrom(delta.baseUnitMagnitude(), delta.unit());
         if (Utils.isSimulation()) {
             handleSimulation(config);
-        }
+        }        
     }
 
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
@@ -124,6 +127,23 @@ public class Drivetrain extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
             this.getState().Pose.getRotation().getDegrees()
         ));
     }
+
+    @Logged
+    public double getPoseX() {
+        return this.getState().Pose.getX();
+    }
+
+    @Logged
+    public double getPoseY() {
+        return this.getState().Pose.getX();
+    }
+
+    @Logged
+    public Rotation2d getRot() {
+        return this.getState().Pose.getRotation();
+    }
+
+
 
     public double clampLinearVelocity(double v) {
         return clamp(v, -maxLinearSpeedMps, maxLinearSpeedMps);

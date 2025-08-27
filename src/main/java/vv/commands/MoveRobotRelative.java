@@ -3,25 +3,26 @@ package vv.commands;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import static vv.commands.utils.VVPIDControllers.generalRotationController;
 import static vv.commands.utils.VVPIDControllers.generalTranslationController;
 import vv.config.VVConfig;
-import vv.subsystems.drivetrain.Drivetrain;
+import vv.subsystems.drivetrain.DrivetrainSubsystem;
 
 public class MoveRobotRelative extends Command {
     private final boolean debugLogging;
-    private final Drivetrain drivetrain;
+    private final DrivetrainSubsystem drivetrain;
     private final Transform2d transform;
     private final ProfiledPIDController xController;
     private final ProfiledPIDController yController;
     private final ProfiledPIDController rotController;
 
-    public MoveRobotRelative(VVConfig config, Drivetrain drivetrain, Transform2d transform) {
+    public MoveRobotRelative(VVConfig config, DrivetrainSubsystem drivetrain, Transform2d transform) {
         this(config, drivetrain, transform, false);
     }
 
-    public MoveRobotRelative(VVConfig config, Drivetrain drivetrain, Transform2d transform, boolean debugLogging) {
+    public MoveRobotRelative(VVConfig config, DrivetrainSubsystem drivetrain, Transform2d transform, boolean debugLogging) {
         this.drivetrain = drivetrain;
         this.transform = transform;
         this.debugLogging = debugLogging;
@@ -50,6 +51,10 @@ public class MoveRobotRelative extends Command {
         var vy = yController.calculate(currentPose.getY());
         var omega = rotController.calculate(currentPose.getRotation().getRadians());        
         drivetrain.driveFieldRelative(vx, vy, omega);
+
+        SmartDashboard.putData("MovePIDX", xController);
+        SmartDashboard.putData("MovePIDY", yController);
+        SmartDashboard.putData("MovePIDRot", rotController);
     }
 
     @Override

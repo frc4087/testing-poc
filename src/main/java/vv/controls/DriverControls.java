@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import vv.config.VVConfig;
-import vv.subsystems.drivetrain.Drivetrain;
+import vv.subsystems.drivetrain.DrivetrainSubsystem;
 
 public class DriverControls {
     private final CommandXboxController controller;
@@ -23,7 +23,7 @@ public class DriverControls {
 
     public DriverControls(
         VVConfig config, 
-        Drivetrain drivetrain
+        DrivetrainSubsystem drivetrain
     ) {
         var driverConfig = config.controllers().driver();
         this.maxLinearSpeed = config.drivetrain().constants().maxLinearSpeed().in(MetersPerSecond);

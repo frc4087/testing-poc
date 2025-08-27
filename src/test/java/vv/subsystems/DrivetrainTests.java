@@ -18,8 +18,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import vv.commands.MoveRobotRelative;
-import vv.subsystems.drivetrain.Drivetrain;
 import vv.subsystems.drivetrain.DrivetrainFactory;
+import vv.subsystems.drivetrain.DrivetrainSubsystem;
 import static vv.utils.TestSetup.CONFIG;
 import static vv.utils.TestSetup.POSITION_TEST_TOLERANCE;
 import static vv.utils.TestSetup.ROTATIONAL_TEST_TOLERANCE_DEG;
@@ -29,7 +29,7 @@ import static vv.utils.TestSetup.resetSimulationState;
 
 public class DrivetrainTests {
 
-    Drivetrain drivetrain;
+    DrivetrainSubsystem drivetrain;
 
     @BeforeEach
     @SuppressWarnings("unused")
@@ -283,11 +283,11 @@ public class DrivetrainTests {
 
 
     static class TestCommand extends Command {
-        private final Drivetrain drivetrain;
+        private final DrivetrainSubsystem drivetrain;
         private final SwerveRequest req;
         int cycles = 0;
 
-        public TestCommand(Drivetrain drivetrain, SwerveRequest req) {
+        public TestCommand(DrivetrainSubsystem drivetrain, SwerveRequest req) {
             this.drivetrain = drivetrain;
             this.req = req;
             addRequirements(drivetrain);

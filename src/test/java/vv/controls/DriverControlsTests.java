@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import vv.subsystems.drivetrain.Drivetrain;
 import vv.subsystems.drivetrain.DrivetrainFactory;
+import vv.subsystems.drivetrain.DrivetrainSubsystem;
 import static vv.utils.TestSetup.CONFIG;
 import static vv.utils.TestSetup.ROTATIONAL_VELOCITY_TEST_TOLERANCE_RAD_PER_SEC;
 import static vv.utils.TestSetup.VELOCITY_TEST_TOLERANCE_MPS;
@@ -19,7 +19,7 @@ import static vv.utils.TestSetup.resetSimulationState;
 
 public class DriverControlsTests {
     
-    Drivetrain drivetrain;
+    DrivetrainSubsystem drivetrain;
     DriverControls driverControls;
 
     @BeforeEach

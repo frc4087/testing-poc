@@ -15,7 +15,7 @@ import vv.config.VVConfig;
 
 public class DrivetrainFactory {
     
-    public static Drivetrain createDrivetrain(VVConfig config) {
+    public static DrivetrainSubsystem createDrivetrain(VVConfig config) {
         SwerveDrivetrainConstants drivetrainConstants = createDrivetrainConstants(config);
 
         var moduleConstantCreator = createSwerveModuleConstantsFactory(config);
@@ -26,7 +26,7 @@ public class DrivetrainFactory {
             createSwerveModuleConstants(moduleConstantCreator, config.drivetrain().backRightModule())
         };
 
-        return new Drivetrain(config, drivetrainConstants, swerveModules);
+        return new DrivetrainSubsystem(config, drivetrainConstants, swerveModules);
     }
 
     private static SwerveDrivetrainConstants createDrivetrainConstants(VVConfig config) {
