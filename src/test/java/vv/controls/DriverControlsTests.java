@@ -28,7 +28,8 @@ public class DriverControlsTests {
         resetSimulationState();
         drivetrain = DrivetrainFactory.createDrivetrain(CONFIG);
         drivetrain.register();
-        driverControls = new DriverControls(CONFIG, drivetrain);
+        driverControls = new DriverControls(CONFIG.controllers());
+        driverControls.setupTriggers(CONFIG, drivetrain);
     }
 
     @Test
