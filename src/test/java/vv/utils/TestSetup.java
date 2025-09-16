@@ -1,5 +1,7 @@
 package vv.utils;
 
+import java.util.Timer;
+
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 
@@ -27,10 +29,11 @@ public class TestSetup {
         if (!HAL.initialize(500, 0)) {
             throw new RuntimeException("HAL initialization failed");
         }
-        
+
         RobotController.resetRailFaultCounts();
         CommandScheduler.getInstance().cancelAll();
-        CommandScheduler.getInstance().run();
+        CommandScheduler.getInstance().clearComposedCommands();
+    
         DriverStationSim.resetData();
         DriverStationSim.setEnabled(true);
         DriverStationSim.notifyNewData();

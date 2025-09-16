@@ -11,6 +11,7 @@ public class VVConfig {
     private final PIDConfig pid;
     private final SimulationConfig simulation;
     private final ControllersConfig controllers;
+    private final RollerConfig roller;
 
     private VVConfig(String filePath) {
         var props = readFileConfig(filePath);
@@ -18,6 +19,7 @@ public class VVConfig {
         this.pid = PIDConfig.fromProperties(props);
         this.simulation = SimulationConfig.fromProperties(props);
         this.controllers = ControllersConfig.fromProperties(props);
+        this.roller = RollerConfig.fromProperties(props);
     }
 
     public DrivetrainConfig drivetrain() {
@@ -34,6 +36,10 @@ public class VVConfig {
 
     public ControllersConfig controllers() {
         return this.controllers;
+    }
+
+    public RollerConfig roller() {
+        return this.roller;
     }
 
     public static VVConfig readFromPath(String filePath) {

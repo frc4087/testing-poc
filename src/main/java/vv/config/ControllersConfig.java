@@ -8,7 +8,8 @@ import static vv.config.PropertyReaders.readIntegerProperty;
 
 public record ControllersConfig(
     Double rumbleIntensity,
-    DriverConfig driver
+    DriverConfig driver,
+    OperatorConfig operator
 ) {
     public ControllersConfig {
         Objects.requireNonNull(rumbleIntensity, "Rumble intensity cannot be null");
@@ -19,7 +20,8 @@ public record ControllersConfig(
     public static ControllersConfig fromProperties(Properties props) {
         return new ControllersConfig(
             readDoubleProperty(props, "controllers.rumble.intensity"),
-            DriverConfig.fromProperties(props)
+            DriverConfig.fromProperties(props),
+            OperatorConfig.fromProperties(props)
         );
     }
 
@@ -39,6 +41,20 @@ public record ControllersConfig(
                 readIntegerProperty(props, "controllers.driver.port"),
                 readDoubleProperty(props, "controllers.driver.translational.deadband"),
                 readDoubleProperty(props, "controllers.driver.rotational.deadband")
+            );
+        }
+    }
+
+    public static record OperatorConfig(
+        Integer port
+    ) {
+        public OperatorConfig {
+            Objects.requireNonNull(port, "Operator port cannot be null");
+        }
+
+        public static OperatorConfig fromProperties(Properties props) {
+            return new OperatorConfig(
+                readIntegerProperty(props, "controllers.operator.port")
             );
         }
     }
