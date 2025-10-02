@@ -7,6 +7,7 @@ import java.util.Properties;
 
 public class VVConfig {
 
+    private final ArmConfig armConfig; 
     private final DrivetrainConfig drivetrainConfig; 
     private final PIDConfig pid;
     private final SimulationConfig simulation;
@@ -15,6 +16,7 @@ public class VVConfig {
 
     private VVConfig(String filePath) {
         var props = readFileConfig(filePath);
+        this.armConfig = ArmConfig.fromProperties(props);
         this.drivetrainConfig = DrivetrainConfig.fromProperties(props);
         this.pid = PIDConfig.fromProperties(props);
         this.simulation = SimulationConfig.fromProperties(props);
@@ -40,6 +42,10 @@ public class VVConfig {
 
     public RollerConfig roller() {
         return this.roller;
+    }
+
+    public ArmConfig arm() {
+        return this.armConfig;
     }
 
     public static VVConfig readFromPath(String filePath) {

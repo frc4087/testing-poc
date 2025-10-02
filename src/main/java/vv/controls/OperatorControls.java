@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.simulation.XboxControllerSim;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import vv.config.ControllersConfig;
+import vv.subsystems.arm.ArmSubsystem;
 import vv.subsystems.roller.RollerSubsystem;
 
 public class OperatorControls {
@@ -17,13 +18,20 @@ public class OperatorControls {
         sim = new XboxControllerSim(controller.getHID());
     }
 
-    public void setupTriggers(DriverControls driverControls, RollerSubsystem roller) {
+    public void setupTriggers(DriverControls driverControls, RollerSubsystem roller, ArmSubsystem arm) {
+        // Driver controls
         controller.rightBumper()
             .whileTrue(Commands.parallel(
                 roller.output(), driverControls.rumble()))
             .onFalse(roller.idle());
 
+        // Roller controls
         controller.leftBumper().whileTrue(roller.intake());
+
+        // Arm controls
+        controller.x().onTrue(arm.snapUp());
+		controller.b().onTrue(arm.snapDown());
+		controller.leftTrigger().whileTrue(arm.runUp());
     }
 
     public CommandXboxController controls() {

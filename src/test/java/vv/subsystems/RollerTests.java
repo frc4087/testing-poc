@@ -70,7 +70,6 @@ public class RollerTests {
         });
     }
 
-
     @Test
     void testOutputBehavior() {
         // Act

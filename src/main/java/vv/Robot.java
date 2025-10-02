@@ -14,6 +14,7 @@ import vv.commands.MoveRobotRelative;
 import vv.config.VVConfig;
 import vv.controls.DriverControls;
 import vv.controls.OperatorControls;
+import vv.subsystems.arm.ArmSubsystem;
 import vv.subsystems.drivetrain.DrivetrainFactory;
 import vv.subsystems.drivetrain.DrivetrainSubsystem;
 import vv.subsystems.roller.RollerSubsystem;
@@ -22,20 +23,27 @@ public class Robot extends TimedRobot{
     
     public static Robot instance = null;
     private final VVConfig config;
+    
+    // Controls
     private final DriverControls driverControls;
     private final OperatorControls operatorControls;
+
+    // Subsystems
     private final DrivetrainSubsystem drivetrain;
     private final RollerSubsystem roller;
+    private final ArmSubsystem arm;
 
     private Robot() {
         config = VVConfig.readFromPath("./src/main/deploy/practice-robot.properties");
         driverControls = new DriverControls(config.controllers());
         operatorControls = new OperatorControls(config.controllers());
+
         drivetrain = DrivetrainFactory.createDrivetrain(config);
         roller = new RollerSubsystem(config);
+        arm = new ArmSubsystem(config);
 
         driverControls.setupTriggers(config, drivetrain);
-        operatorControls.setupTriggers(driverControls, roller);
+        operatorControls.setupTriggers(driverControls, roller, arm);
     }
 
     public static Robot start() {

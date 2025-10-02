@@ -5,6 +5,8 @@ import java.util.Optional;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import vv.config.RollerConfig;
 import vv.config.SimulationConfig;
 import vv.sims.TalonFXSim;
@@ -23,7 +25,12 @@ public class RollerMotor {
         outputSpeed = config.outputSpeed();
         idleSpeed = config.idleSpeed();
 
-        sim = Optional.ofNullable(Utils.isSimulation() ? new TalonFXSim(simConfig, talon) : null);
+        var sysId = LinearSystemId.createDCMotorSystem(
+            DCMotor.getKrakenX60Foc(1), 
+            0.0029,
+            1
+        );
+        sim = Optional.ofNullable(Utils.isSimulation() ? new TalonFXSim(simConfig, talon, sysId, 1) : null);
     }
 
     public void intake() {

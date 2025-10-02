@@ -2,8 +2,10 @@ package vv.sims;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.wpilibj.RobotController;
@@ -12,19 +14,16 @@ import vv.config.SimulationConfig;
 
 public class TalonFXSim {
     
-    private final TalonFX talon;
-    private final DCMotorSim sim;
-    private final double loopPeriod; 
+    protected final TalonFX talon;
+    protected final DCMotorSim sim;
+    protected final double loopPeriod; 
 
-    public TalonFXSim(SimulationConfig config, TalonFX talon) {
+    public TalonFXSim(SimulationConfig config, TalonFX talon, LinearSystem<N2, N1, N2> sysId, Integer numMotors) {
         this.talon = talon;
+
         this.sim = new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(
-                DCMotor.getKrakenX60Foc(1),
-                0.001,
-                1.0 
-            ),
-            DCMotor.getKrakenX60Foc(1)
+            sysId,
+            DCMotor.getKrakenX60Foc(numMotors)
         );
         this.loopPeriod = config.simLoopPeriodFreq().asPeriod().baseUnitMagnitude();
         talon.getDutyCycle().setUpdateFrequency(config.signalUpdateFreq());

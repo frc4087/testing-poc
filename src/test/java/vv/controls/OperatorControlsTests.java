@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import vv.config.RollerConfig;
+import vv.subsystems.arm.ArmSubsystem;
 import vv.subsystems.roller.RollerSubsystem;
 import static vv.utils.TestSetup.CONFIG;
 import static vv.utils.TestSetup.resetSimulationState;
@@ -16,9 +17,11 @@ import static vv.utils.TestSetup.resetSimulationState;
 public class OperatorControlsTests {
     
     RollerConfig config;
-    RollerSubsystem roller;
     OperatorControls operatorControls;
     DriverControls driverControls;
+
+    RollerSubsystem roller;
+    ArmSubsystem arm;
 
     @BeforeEach
     void beforeEach() {
@@ -28,8 +31,9 @@ public class OperatorControlsTests {
         roller.simulationPeriodic();
         driverControls = new DriverControls(CONFIG.controllers());
         operatorControls = new OperatorControls(CONFIG.controllers());
+        arm = new ArmSubsystem(CONFIG);
         
-        operatorControls.setupTriggers(driverControls, roller);
+        operatorControls.setupTriggers(driverControls, roller, arm);
     }
 
     @AfterEach
